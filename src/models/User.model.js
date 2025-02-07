@@ -3,12 +3,12 @@ import { database } from '../config/db.js';
 
 export const User = database.define('users',
     {
-        user_id: {
+        id: {
             type: DataTypes.UUID,
             primaryKey: true,
             defaultValue: DataTypes.UUIDV4,
         },
-        name: {
+        username: {
             type: DataTypes.STRING(255),
             allowNull: false,
         },
@@ -21,9 +21,15 @@ export const User = database.define('users',
             type: DataTypes.STRING(255),
             allowNull: false,
         },
+        age: {
+            type: DataTypes.INTEGER,
+            allowNull: false,
+        },
     }, 
     {
         tableName: 'users',
         timestamps: true,
+        createdAt: 'created_at', // Mapeia o campo created_at no banco
+        updatedAt: 'updated_at'  // Mapeia o campo updated_at no banco
     }
 );

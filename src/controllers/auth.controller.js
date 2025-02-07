@@ -8,14 +8,15 @@ User.sync()
 
 // REGISTER NEW USER
 export const register = async (req, res) => {
-    const { name, email, password } = req.body;
+    const { username, email, password, age } = req.body;
     console.log('Password', password)
     try {
         const hashedPassword = await bcrypt.hash(password, saltRounds);
         const newUser = await User.create({
-            name,
+            username,
             email,
             password: hashedPassword,
+            age
         });
 
         res.status(201).json({ message: 'User registered successfully', user: newUser });
@@ -46,7 +47,7 @@ export const login = async (req, res) => {
             process.env.JWT_SECRET,
             { expiresIn: '1h' }
         );
-        res.status(200).json({ message: 'Login successful', token, user: { user_id: user.user_id,  name: user.name } });
+        res.status(200).json({ message: 'Login successful', token, user: { user_id: user.user_id,  username: user.username } });
     } catch (error) {
         console.error(error);
         res.status(500).json({ message: 'Error logging in' });
@@ -82,11 +83,7 @@ export const getUserById = async (req, res) => {
 // UPDATE USER
 export const updateUser = async (req, res) => {
     const { id } = req.params;
-    const { name, email, password } = req.body;
-
-    if (user_type && req.user && req.user.user_type !== 'admin') {
-      return res.status(403).json({ message: 'Access denied: admin privileges required' });
-    }
+    const { username, email, password, age } = req.body;
 
     try {
         const user = await User.findByPk(id);
@@ -94,7 +91,7 @@ export const updateUser = async (req, res) => {
             return res.status(404).json({ message: 'User not found' });
         }
 
-        await user.update({ name, email, phone, cpf, user_type });
+        await user.update({ username, email, password, age });
         res.status(200).json({ message: 'User updated successfully', user });
     } catch (error) {
         console.error(error);
