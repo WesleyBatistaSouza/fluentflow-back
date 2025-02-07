@@ -18,7 +18,7 @@ export const Flashcard = database.define("flashcard", {
   },
   image_url: {
     type: DataTypes.STRING,
-    allowNull: true, // Pode ser opcional
+    allowNull: true,
   },
   audio_url: {
     type: DataTypes.STRING,
@@ -52,10 +52,8 @@ export const Tag = database.define("tag", {
   },
 });
 
-// Tabela intermediária FlashcardTag para relação N:N (muitos para muitos)
 export const FlashcardTag = database.define("flashcard_tag", {});
 
-// Definição das relações
 Flashcard.belongsToMany(Tag, { through: FlashcardTag });
 Tag.belongsToMany(Flashcard, { through: FlashcardTag });
 
