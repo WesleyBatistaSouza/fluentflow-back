@@ -1,6 +1,5 @@
 import { Flashcard, Tag } from "../models/flashcards.model.js";
 
-// Criar um novo flashcard com tags, imagem e áudio
 export const createFlashcard = async (req, res) => {
   try {
     const { question, answer, image_url, audio_url, tags } = req.body;
@@ -28,7 +27,6 @@ export const createFlashcard = async (req, res) => {
   }
 };
 
-// Atualizar o intervalo de revisão do flashcard com base no desempenho do usuário
 export const updateFlashcardReview = async (req, res) => {
   try {
     const { flashcard_id } = req.params;
@@ -43,12 +41,10 @@ export const updateFlashcardReview = async (req, res) => {
     let nextReview;
 
     if (correct) {
-      // Se acertou, aumentar o tempo da próxima revisão
-      const intervalDays = [1, 3, 7, 14, 30]; // Exemplo de espaçamento
+      const intervalDays = [1, 3, 7, 14, 30];
       const nextInterval = intervalDays[Math.min(flashcard.times_reviewed, intervalDays.length - 1)];
       nextReview = new Date(now.setDate(now.getDate() + nextInterval));
     } else {
-      // Se errou, revisar novamente no dia seguinte
       nextReview = new Date(now.setDate(now.getDate() + 1));
     }
 
